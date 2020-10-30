@@ -1,0 +1,463 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://UI/theme/theme.tres" type="Theme" id=1]
+[ext_resource path="res://UI/scripts/Control.gd" type="Script" id=3]
+
+[sub_resource type="StreamTexture" id=1]
+flags = 4
+load_path = "res://.import/cog.png-6b421f68711093a988b8d1d777a7a649.stex"
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxMain" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxSub" type="VBoxContainer" parent="VBoxMain"]
+margin_right = 1014.0
+margin_bottom = 176.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DirContainer" type="GridContainer" parent="VBoxMain/VBoxSub"]
+margin_right = 1014.0
+margin_bottom = 48.0
+columns = 3
+
+[node name="SrcDirLabel" type="Label" parent="VBoxMain/VBoxSub/DirContainer"]
+margin_right = 137.0
+margin_bottom = 22.0
+size_flags_horizontal = 5
+size_flags_stretch_ratio = 0.0
+text = "Source Folder:"
+
+[node name="SrcDirLineEdit" type="LineEdit" parent="VBoxMain/VBoxSub/DirContainer"]
+margin_left = 141.0
+margin_right = 903.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+text = "C:/"
+editable = false
+
+[node name="SetSrcDirButton" type="Button" parent="VBoxMain/VBoxSub/DirContainer"]
+margin_left = 907.0
+margin_right = 1014.0
+margin_bottom = 22.0
+text = "Set Directory..."
+
+[node name="ToDirLabel" type="Label" parent="VBoxMain/VBoxSub/DirContainer"]
+margin_top = 26.0
+margin_right = 137.0
+margin_bottom = 48.0
+size_flags_horizontal = 5
+size_flags_stretch_ratio = 0.0
+text = "Save Sorted Files to:"
+
+[node name="ToDirLineEdit" type="LineEdit" parent="VBoxMain/VBoxSub/DirContainer"]
+margin_left = 141.0
+margin_top = 26.0
+margin_right = 903.0
+margin_bottom = 48.0
+size_flags_horizontal = 3
+text = "C:/"
+editable = false
+
+[node name="ToDirButton" type="Button" parent="VBoxMain/VBoxSub/DirContainer"]
+margin_left = 907.0
+margin_top = 26.0
+margin_right = 1014.0
+margin_bottom = 48.0
+text = "Set Directory..."
+
+[node name="HSeparator" type="HSeparator" parent="VBoxMain/VBoxSub"]
+margin_top = 52.0
+margin_right = 1014.0
+margin_bottom = 56.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxMain/VBoxSub"]
+margin_top = 60.0
+margin_right = 1014.0
+margin_bottom = 84.0
+
+[node name="Label" type="Label" parent="VBoxMain/VBoxSub/HBoxContainer"]
+margin_top = 1.0
+margin_right = 162.0
+margin_bottom = 23.0
+text = "Sort out Images that are"
+align = 2
+
+[node name="SmallerBiggerOptionButton" type="OptionButton" parent="VBoxMain/VBoxSub/HBoxContainer"]
+margin_left = 166.0
+margin_right = 274.0
+margin_bottom = 24.0
+size_flags_horizontal = 2
+text = "Smaller than"
+items = [ "Smaller than", null, false, 0, null, "Bigger Than", null, false, 1, null ]
+selected = 0
+
+[node name="PMCheckBox" type="CheckBox" parent="VBoxMain/VBoxSub/HBoxContainer"]
+margin_left = 809.0
+margin_right = 1014.0
+margin_bottom = 24.0
+hint_tooltip = "Checks each image that failed the regual orientation check with swapped height and width"
+text = "Check for Both Orientations"
+
+[node name="VarContainer" type="GridContainer" parent="VBoxMain/VBoxSub"]
+margin_top = 88.0
+margin_right = 1014.0
+margin_bottom = 140.0
+columns = 4
+
+[node name="ResLabel" type="Label" parent="VBoxMain/VBoxSub/VarContainer"]
+margin_top = 1.0
+margin_right = 80.0
+margin_bottom = 23.0
+size_flags_horizontal = 5
+text = "Resolution:"
+
+[node name="XHBoxContainer" type="HBoxContainer" parent="VBoxMain/VBoxSub/VarContainer"]
+margin_left = 84.0
+margin_right = 510.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="XLabel" type="Label" parent="VBoxMain/VBoxSub/VarContainer/XHBoxContainer"]
+margin_top = 1.0
+margin_right = 81.0
+margin_bottom = 23.0
+text = "Width in px"
+
+[node name="XSpinBox" type="SpinBox" parent="VBoxMain/VBoxSub/VarContainer/XHBoxContainer"]
+margin_left = 85.0
+margin_right = 375.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+max_value = 1920.0
+value = 1920.0
+allow_greater = true
+align = 2
+
+[node name="OMOptionButton" type="OptionButton" parent="VBoxMain/VBoxSub/VarContainer/XHBoxContainer"]
+margin_left = 379.0
+margin_right = 426.0
+margin_bottom = 24.0
+hint_tooltip = "TPC multiplies height and width and compares the result to the Total pixel count of the image given"
+text = "OR"
+items = [ "OR", null, false, 0, null, "AND", null, false, 1, null, "TPC", null, false, 2, null ]
+selected = 0
+
+[node name="YHBoxContainer" type="HBoxContainer" parent="VBoxMain/VBoxSub/VarContainer"]
+margin_left = 514.0
+margin_right = 940.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="YLabel" type="Label" parent="VBoxMain/VBoxSub/VarContainer/YHBoxContainer"]
+margin_top = 1.0
+margin_right = 85.0
+margin_bottom = 23.0
+text = "Height in px"
+
+[node name="YSpinBox" type="SpinBox" parent="VBoxMain/VBoxSub/VarContainer/YHBoxContainer"]
+margin_left = 89.0
+margin_right = 426.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+max_value = 1080.0
+value = 1080.0
+allow_greater = true
+align = 2
+
+[node name="ResCheckBox" type="CheckBox" parent="VBoxMain/VBoxSub/VarContainer"]
+margin_left = 944.0
+margin_right = 1014.0
+margin_bottom = 24.0
+pressed = true
+text = "Enable"
+
+[node name="SizeLabel" type="Label" parent="VBoxMain/VBoxSub/VarContainer"]
+margin_top = 29.0
+margin_right = 80.0
+margin_bottom = 51.0
+size_flags_horizontal = 5
+text = "File Size:"
+
+[node name="SizeSpinBox" type="SpinBox" parent="VBoxMain/VBoxSub/VarContainer"]
+margin_left = 84.0
+margin_top = 28.0
+margin_right = 510.0
+margin_bottom = 52.0
+size_flags_horizontal = 3
+value = 100.0
+allow_greater = true
+align = 2
+
+[node name="SizeOptionButton" type="OptionButton" parent="VBoxMain/VBoxSub/VarContainer"]
+margin_left = 514.0
+margin_top = 28.0
+margin_right = 940.0
+margin_bottom = 52.0
+text = "kb"
+align = 2
+items = [ "b", null, false, 0, null, "kb", null, false, 1, null, "mb", null, false, 2, null, "gb", null, false, 3, null ]
+selected = 1
+
+[node name="SizeCheckBox" type="CheckBox" parent="VBoxMain/VBoxSub/VarContainer"]
+margin_left = 944.0
+margin_top = 28.0
+margin_right = 1014.0
+margin_bottom = 52.0
+pressed = true
+text = "Enable"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxMain/VBoxSub"]
+margin_top = 144.0
+margin_right = 1014.0
+margin_bottom = 148.0
+
+[node name="DisplayContainer" type="GridContainer" parent="VBoxMain/VBoxSub"]
+margin_top = 152.0
+margin_right = 1014.0
+margin_bottom = 176.0
+columns = 4
+
+[node name="DisplayLabel" type="Label" parent="VBoxMain/VBoxSub/DisplayContainer"]
+margin_top = 1.0
+margin_right = 250.0
+margin_bottom = 23.0
+size_flags_horizontal = 3
+text = "Display: (will decrease performance)"
+
+[node name="DisplayFilesCheckBox" type="CheckBox" parent="VBoxMain/VBoxSub/DisplayContainer"]
+margin_left = 254.0
+margin_right = 504.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+text = "Display Files"
+
+[node name="DisplayFoldersCheckBox" type="CheckBox" parent="VBoxMain/VBoxSub/DisplayContainer"]
+margin_left = 508.0
+margin_right = 758.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+pressed = true
+text = "Display Folders"
+
+[node name="DisplayMilestonesCheckBox" type="CheckBox" parent="VBoxMain/VBoxSub/DisplayContainer"]
+margin_left = 762.0
+margin_right = 1012.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+pressed = true
+text = "Display Milestones"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxMain"]
+margin_top = 180.0
+margin_right = 1014.0
+margin_bottom = 208.0
+
+[node name="MoreOptionsButton" type="Button" parent="VBoxMain/HBoxContainer"]
+margin_right = 32.0
+margin_bottom = 28.0
+hint_tooltip = "More Options [WIP]"
+disabled = true
+icon = SubResource( 1 )
+
+[node name="GoButton" type="Button" parent="VBoxMain/HBoxContainer"]
+margin_left = 36.0
+margin_right = 1014.0
+margin_bottom = 28.0
+hint_tooltip = "Start"
+size_flags_horizontal = 3
+text = "GO"
+
+[node name="CurrentProgressBar" type="ProgressBar" parent="VBoxMain"]
+margin_top = 212.0
+margin_right = 1014.0
+margin_bottom = 226.0
+hint_tooltip = "Current Step Progress"
+
+[node name="TotalProgressBar" type="ProgressBar" parent="VBoxMain"]
+margin_top = 230.0
+margin_right = 1014.0
+margin_bottom = 244.0
+hint_tooltip = "Total Progress"
+
+[node name="TextEdit" type="TextEdit" parent="VBoxMain"]
+margin_top = 248.0
+margin_right = 1014.0
+margin_bottom = 590.0
+size_flags_vertical = 3
+readonly = true
+
+[node name="SrcFileDialog" type="FileDialog" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 29.0
+margin_right = -5.0
+margin_bottom = -5.0
+window_title = "Open a Directory"
+mode = 2
+access = 2
+current_dir = "F:/GGG/TWO"
+current_path = "F:/GGG/TWO/"
+
+[node name="ToFileDialog" type="FileDialog" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 29.0
+margin_right = -5.0
+margin_bottom = -5.0
+window_title = "Open a Directory"
+mode = 2
+access = 2
+current_dir = "F:/GGG/TWO"
+current_path = "F:/GGG/TWO/"
+
+[node name="AODialog" type="WindowDialog" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 29.0
+margin_right = -5.0
+margin_bottom = -5.0
+window_title = "Advanced Settings"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AOMainContainer" type="MarginContainer" parent="AODialog"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AOVBoxContainer" type="VBoxContainer" parent="AODialog/AOMainContainer"]
+margin_right = 1004.0
+margin_bottom = 556.0
+
+[node name="AResLabel" type="Label" parent="AODialog/AOMainContainer/AOVBoxContainer"]
+visible = false
+margin_right = 1004.0
+margin_bottom = 22.0
+text = "Advanced Resolution Settings"
+
+[node name="HSeparator" type="HSeparator" parent="AODialog/AOMainContainer/AOVBoxContainer"]
+visible = false
+margin_top = 26.0
+margin_right = 1004.0
+margin_bottom = 30.0
+
+[node name="AResGridContainer" type="GridContainer" parent="AODialog/AOMainContainer/AOVBoxContainer"]
+visible = false
+margin_top = 34.0
+margin_right = 1004.0
+margin_bottom = 56.0
+size_flags_horizontal = 3
+columns = 2
+
+[node name="SmallerBiggerLabel" type="Label" parent="AODialog/AOMainContainer/AOVBoxContainer/AResGridContainer"]
+margin_right = 892.0
+margin_bottom = 22.0
+hint_tooltip = "Instead of checking either side, calculates the amount of pixels in an image and compares against that"
+mouse_filter = 1
+size_flags_horizontal = 3
+text = "Sort images smaller or bigger than given resolution"
+
+[node name="SmallerBiggerOptionButton" type="OptionButton" parent="AODialog/AOMainContainer/AOVBoxContainer/AResGridContainer"]
+margin_left = 896.0
+margin_right = 1004.0
+margin_bottom = 22.0
+text = "Smaller than"
+items = [ "Smaller than", null, false, 0, null, "Bigger than", null, false, 1, null ]
+selected = 0
+
+[node name="HSeparator3" type="HSeparator" parent="AODialog/AOMainContainer/AOVBoxContainer"]
+visible = false
+margin_right = 1004.0
+margin_bottom = 4.0
+
+[node name="FSizeLabel" type="Label" parent="AODialog/AOMainContainer/AOVBoxContainer"]
+margin_right = 1004.0
+margin_bottom = 22.0
+text = "File Size Settings"
+
+[node name="HSeparator2" type="HSeparator" parent="AODialog/AOMainContainer/AOVBoxContainer"]
+margin_top = 26.0
+margin_right = 1004.0
+margin_bottom = 30.0
+
+[node name="FSizeGridContainer" type="GridContainer" parent="AODialog/AOMainContainer/AOVBoxContainer"]
+margin_top = 34.0
+margin_right = 1004.0
+margin_bottom = 556.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 2
+
+[node name="FSmallerBiggerLabel" type="Label" parent="AODialog/AOMainContainer/AOVBoxContainer/FSizeGridContainer"]
+margin_right = 892.0
+margin_bottom = 22.0
+hint_tooltip = "Instead of checking either side, calculates the amount of pixels in an image and compares against that"
+mouse_filter = 1
+size_flags_horizontal = 3
+text = "Sort images with a smaller or bigger file size than given"
+
+[node name="FSmallerBiggerOptionButton" type="OptionButton" parent="AODialog/AOMainContainer/AOVBoxContainer/FSizeGridContainer"]
+margin_left = 896.0
+margin_right = 1004.0
+margin_bottom = 22.0
+text = "Smaller than"
+items = [ "Smaller than", null, false, 0, null, "Bigger than", null, false, 1, null ]
+selected = 0
+[connection signal="pressed" from="VBoxMain/VBoxSub/DirContainer/SetSrcDirButton" to="." method="_on_SetSrcDirButton_pressed"]
+[connection signal="pressed" from="VBoxMain/VBoxSub/DirContainer/ToDirButton" to="." method="_on_ToDirButton_pressed"]
+[connection signal="item_selected" from="VBoxMain/VBoxSub/HBoxContainer/SmallerBiggerOptionButton" to="." method="_on_SmallerBiggerOptionButton_item_selected"]
+[connection signal="toggled" from="VBoxMain/VBoxSub/HBoxContainer/PMCheckBox" to="." method="_on_PMCheckBox_toggled"]
+[connection signal="value_changed" from="VBoxMain/VBoxSub/VarContainer/XHBoxContainer/XSpinBox" to="." method="_on_XSpinBox_value_changed"]
+[connection signal="item_selected" from="VBoxMain/VBoxSub/VarContainer/XHBoxContainer/OMOptionButton" to="." method="_on_OMOptionButton_item_selected"]
+[connection signal="value_changed" from="VBoxMain/VBoxSub/VarContainer/YHBoxContainer/YSpinBox" to="." method="_on_YSpinBox_value_changed"]
+[connection signal="toggled" from="VBoxMain/VBoxSub/VarContainer/ResCheckBox" to="." method="_on_ResCheckBox_toggled"]
+[connection signal="value_changed" from="VBoxMain/VBoxSub/VarContainer/SizeSpinBox" to="." method="_on_SizeSpinBox_value_changed"]
+[connection signal="item_selected" from="VBoxMain/VBoxSub/VarContainer/SizeOptionButton" to="." method="_on_SizeOptionButton_item_selected"]
+[connection signal="toggled" from="VBoxMain/VBoxSub/VarContainer/SizeCheckBox" to="." method="_on_SizeCheckBox_toggled"]
+[connection signal="toggled" from="VBoxMain/VBoxSub/DisplayContainer/DisplayFilesCheckBox" to="." method="_on_DisplayFilesCheckBox_toggled"]
+[connection signal="toggled" from="VBoxMain/VBoxSub/DisplayContainer/DisplayFoldersCheckBox" to="." method="_on_DisplayFoldersCheckBox_toggled"]
+[connection signal="toggled" from="VBoxMain/VBoxSub/DisplayContainer/DisplayMilestonesCheckBox" to="." method="_on_DisplayMilestonesCheckBox_toggled"]
+[connection signal="pressed" from="VBoxMain/HBoxContainer/MoreOptionsButton" to="." method="_on_MoreOptionsButton_pressed"]
+[connection signal="pressed" from="VBoxMain/HBoxContainer/GoButton" to="." method="_on_GoButton_pressed"]
+[connection signal="dir_selected" from="SrcFileDialog" to="." method="_on_SrcFileDialog_dir_selected"]
+[connection signal="dir_selected" from="ToFileDialog" to="." method="_on_ToFileDialog_dir_selected"]
+[connection signal="item_selected" from="AODialog/AOMainContainer/AOVBoxContainer/FSizeGridContainer/FSmallerBiggerOptionButton" to="." method="_on_FSmallerBiggerOptionButton_item_selected"]
