@@ -393,8 +393,10 @@ func _on_OMOptionButton_item_selected(id):
 	match(id):
 		0: #Either Side (default)
 			operatingModeID = operatingModes.Both
+			$VBoxMain/VBoxSub/HBoxContainer/PMCheckBox.disabled = false
 		1: #Both Sides
 			operatingModeID = operatingModes.Either
+			$VBoxMain/VBoxSub/HBoxContainer/PMCheckBox.disabled = false
 		2: #Total Pixel Count
 			operatingModeID = operatingModes.TPC
 			$VBoxMain/VBoxSub/HBoxContainer/PMCheckBox.disabled = true
