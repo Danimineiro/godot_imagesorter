@@ -92,14 +92,13 @@ func _on_SizeSpinBox_value_changed(value):
 	fileSizeMin = value
 
 func display_text(text = String()):
+		
 	$VBoxMain/TextEdit.text = str($VBoxMain/TextEdit.text, text, "\n")
 	$VBoxMain/TextEdit.cursor_set_line($VBoxMain/TextEdit.get_line_count())
 	
 	if $VBoxMain/TextEdit.get_line_count() > maxTextEditLines:
-		maxTextEditLines += 1
-		$VBoxMain/TextEdit.set_line_as_hidden(textEditHiddenLines, true)
-		textEditHiddenLines += 1
-
+		$VBoxMain/TextEdit.text = $VBoxMain/TextEdit.text.split("\n", true, maxTextEditLines/2)[maxTextEditLines/2] #Half the text displayed for performance
+		
 func dir_contents(path, layer = int()):
 	var dir = Directory.new()
 	mutex.lock()
@@ -141,6 +140,9 @@ func dir_contents(path, layer = int()):
 	return
 
 func _on_GoButton_pressed():
+	$VBoxMain/CurrentProgressBar.value = 0
+	$VBoxMain/TotalProgressBar.value = 0
+	
 	var error_state = false
 	
 	if srcDir == "C:/":
@@ -379,12 +381,13 @@ func _on_MoreOptionsButton_pressed():
 	$AODialog.popup()
 
 func _on_SmallerBiggerOptionButton_item_selected(id):
-	_on_FSmallerBiggerOptionButton_item_selected(id)
 	match(id):
 		0: #Smaller then (default)
 			resBiggerThenEnabled = false
+			sizeBiggerThenEnabled = false
 		1: #Bigger then
 			resBiggerThenEnabled = true
+			sizeBiggerThenEnabled = true
 
 func _on_PMCheckBox_toggled(button_pressed):
 	toComputePortraitMode = button_pressed
@@ -401,9 +404,5 @@ func _on_OMOptionButton_item_selected(id):
 			operatingModeID = operatingModes.TPC
 			$VBoxMain/VBoxSub/HBoxContainer/PMCheckBox.disabled = true
 
-func _on_FSmallerBiggerOptionButton_item_selected(id):
-	match(id):
-		0: #Smaller then (default)
-			sizeBiggerThenEnabled = false
-		1: #Bigger then
-			sizeBiggerThenEnabled = true
+func _on_ASPMaxLinesSpinBox_value_changed(value):
+	maxTextEditLines = value

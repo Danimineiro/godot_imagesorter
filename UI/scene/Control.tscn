@@ -285,7 +285,6 @@ margin_bottom = 208.0
 margin_right = 32.0
 margin_bottom = 28.0
 hint_tooltip = "More Options [WIP]"
-disabled = true
 icon = SubResource( 1 )
 
 [node name="GoButton" type="Button" parent="VBoxMain/HBoxContainer"]
@@ -368,80 +367,37 @@ __meta__ = {
 margin_right = 1004.0
 margin_bottom = 556.0
 
-[node name="AResLabel" type="Label" parent="AODialog/AOMainContainer/AOVBoxContainer"]
-visible = false
+[node name="ASPLabel" type="Label" parent="AODialog/AOMainContainer/AOVBoxContainer"]
 margin_right = 1004.0
 margin_bottom = 22.0
-text = "Advanced Resolution Settings"
+text = "Advanced Performance Settings"
 
 [node name="HSeparator" type="HSeparator" parent="AODialog/AOMainContainer/AOVBoxContainer"]
-visible = false
 margin_top = 26.0
 margin_right = 1004.0
 margin_bottom = 30.0
 
-[node name="AResGridContainer" type="GridContainer" parent="AODialog/AOMainContainer/AOVBoxContainer"]
-visible = false
+[node name="ASPGridContainer" type="GridContainer" parent="AODialog/AOMainContainer/AOVBoxContainer"]
 margin_top = 34.0
 margin_right = 1004.0
 margin_bottom = 56.0
 size_flags_horizontal = 3
 columns = 2
 
-[node name="SmallerBiggerLabel" type="Label" parent="AODialog/AOMainContainer/AOVBoxContainer/AResGridContainer"]
-margin_right = 892.0
+[node name="ASPMaxLinesLabel" type="Label" parent="AODialog/AOMainContainer/AOVBoxContainer/ASPGridContainer"]
+margin_right = 924.0
 margin_bottom = 22.0
-hint_tooltip = "Instead of checking either side, calculates the amount of pixels in an image and compares against that"
 mouse_filter = 1
 size_flags_horizontal = 3
-text = "Sort images smaller or bigger than given resolution"
+text = "Set how many lines to display in the text field. (Lower is better)"
 
-[node name="SmallerBiggerOptionButton" type="OptionButton" parent="AODialog/AOMainContainer/AOVBoxContainer/AResGridContainer"]
-margin_left = 896.0
+[node name="ASPMaxLinesSpinBox" type="SpinBox" parent="AODialog/AOMainContainer/AOVBoxContainer/ASPGridContainer"]
+margin_left = 928.0
 margin_right = 1004.0
 margin_bottom = 22.0
-text = "Smaller than"
-items = [ "Smaller than", null, false, 0, null, "Bigger than", null, false, 1, null ]
-selected = 0
-
-[node name="HSeparator3" type="HSeparator" parent="AODialog/AOMainContainer/AOVBoxContainer"]
-visible = false
-margin_right = 1004.0
-margin_bottom = 4.0
-
-[node name="FSizeLabel" type="Label" parent="AODialog/AOMainContainer/AOVBoxContainer"]
-margin_right = 1004.0
-margin_bottom = 22.0
-text = "File Size Settings"
-
-[node name="HSeparator2" type="HSeparator" parent="AODialog/AOMainContainer/AOVBoxContainer"]
-margin_top = 26.0
-margin_right = 1004.0
-margin_bottom = 30.0
-
-[node name="FSizeGridContainer" type="GridContainer" parent="AODialog/AOMainContainer/AOVBoxContainer"]
-margin_top = 34.0
-margin_right = 1004.0
-margin_bottom = 556.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-columns = 2
-
-[node name="FSmallerBiggerLabel" type="Label" parent="AODialog/AOMainContainer/AOVBoxContainer/FSizeGridContainer"]
-margin_right = 892.0
-margin_bottom = 22.0
-hint_tooltip = "Instead of checking either side, calculates the amount of pixels in an image and compares against that"
-mouse_filter = 1
-size_flags_horizontal = 3
-text = "Sort images with a smaller or bigger file size than given"
-
-[node name="FSmallerBiggerOptionButton" type="OptionButton" parent="AODialog/AOMainContainer/AOVBoxContainer/FSizeGridContainer"]
-margin_left = 896.0
-margin_right = 1004.0
-margin_bottom = 22.0
-text = "Smaller than"
-items = [ "Smaller than", null, false, 0, null, "Bigger than", null, false, 1, null ]
-selected = 0
+max_value = 10000.0
+value = 1000.0
+allow_greater = true
 [connection signal="pressed" from="VBoxMain/VBoxSub/DirContainer/SetSrcDirButton" to="." method="_on_SetSrcDirButton_pressed"]
 [connection signal="pressed" from="VBoxMain/VBoxSub/DirContainer/ToDirButton" to="." method="_on_ToDirButton_pressed"]
 [connection signal="item_selected" from="VBoxMain/VBoxSub/HBoxContainer/SmallerBiggerOptionButton" to="." method="_on_SmallerBiggerOptionButton_item_selected"]
@@ -460,4 +416,4 @@ selected = 0
 [connection signal="pressed" from="VBoxMain/HBoxContainer/GoButton" to="." method="_on_GoButton_pressed"]
 [connection signal="dir_selected" from="SrcFileDialog" to="." method="_on_SrcFileDialog_dir_selected"]
 [connection signal="dir_selected" from="ToFileDialog" to="." method="_on_ToFileDialog_dir_selected"]
-[connection signal="item_selected" from="AODialog/AOMainContainer/AOVBoxContainer/FSizeGridContainer/FSmallerBiggerOptionButton" to="." method="_on_FSmallerBiggerOptionButton_item_selected"]
+[connection signal="value_changed" from="AODialog/AOMainContainer/AOVBoxContainer/ASPGridContainer/ASPMaxLinesSpinBox" to="." method="_on_ASPMaxLinesSpinBox_value_changed"]
