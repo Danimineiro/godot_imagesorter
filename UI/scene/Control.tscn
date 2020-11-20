@@ -300,6 +300,7 @@ margin_top = 212.0
 margin_right = 1014.0
 margin_bottom = 226.0
 hint_tooltip = "Current Step Progress"
+step = 0.0
 
 [node name="TotalProgressBar" type="ProgressBar" parent="VBoxMain"]
 margin_top = 230.0
@@ -324,8 +325,8 @@ margin_bottom = -5.0
 window_title = "Open a Directory"
 mode = 2
 access = 2
-current_dir = "D:/GGG/TWO"
-current_path = "D:/GGG/TWO/"
+current_dir = "F:/GGG/TWO"
+current_path = "F:/GGG/TWO/"
 
 [node name="ToFileDialog" type="FileDialog" parent="."]
 anchor_right = 1.0
@@ -337,8 +338,8 @@ margin_bottom = -5.0
 window_title = "Open a Directory"
 mode = 2
 access = 2
-current_dir = "D:/GGG/TWO"
-current_path = "D:/GGG/TWO/"
+current_dir = "F:/GGG/TWO"
+current_path = "F:/GGG/TWO/"
 
 [node name="AODialog" type="WindowDialog" parent="."]
 anchor_right = 1.0

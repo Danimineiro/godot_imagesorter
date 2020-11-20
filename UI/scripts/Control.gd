@@ -8,6 +8,7 @@ var milestone = 50
 
 var mutex = Mutex.new()
 var threads = []
+var threadAmount = 4
 
 var xMin = 1920
 var yMin = 1080
@@ -131,7 +132,7 @@ func dir_contents(path, layer = int()):
 				mutex.unlock()
 			file_name = dir.get_next()
 	else:
-		print("An error occurred when trying to access the path:", path)
+		print("An error occurred when trying to access the path: ", path)
 	
 	
 	mutex.lock()
@@ -143,6 +144,7 @@ func dir_contents(path, layer = int()):
 	return
 
 func _on_GoButton_pressed():
+	var time_start = OS.get_ticks_msec()
 	$VBoxMain/CurrentProgressBar.value = 0
 	$VBoxMain/TotalProgressBar.value = 0
 	
@@ -181,36 +183,47 @@ func _on_GoButton_pressed():
 	$VBoxMain/VBoxSub/HBoxContainer/PMCheckBox.disabled = true
 	$VBoxMain/VBoxSub/VarContainer/XHBoxContainer/OMOptionButton.disabled = true
 	
-	if threads.size() == 0: threads.append(Thread.new())
-	threads[0].start(self, "dir_contents", srcDir)
+	for ID in threadAmount:
+		threads.append({"thread": Thread.new(), "taskComplete": true, "canBeWaitedFor": false})
+	
+	threads[0].thread.start(self, "dir_contents", srcDir)
+	threads[0].canBeWaitedFor = true
 	
 	yield(self,"files_found")
 	
-	for thread in threads:
-		thread.wait_to_finish()
+	wait_for_threads()
 	
 	$VBoxMain/TotalProgressBar.value = 100 / steps
 	display_text("-----------")
 	display_text("Found Files")
 	display_text("-----------")
 	
-	threads[0].start(self, "get_file_sizes", 0)
+	for ID in threadAmount:
+		var tempArray = Array()
+		var startAt = files.size()/threadAmount * ID
+		var endAt = files.size()/threadAmount * (ID + 1)
+		
+		tempArray = files.slice(startAt, endAt, 1, true)
+		threads[ID].canBeWaitedFor = true
+		threads[ID].thread.start(self, "get_file_sizes", [tempArray, ID])
 	
 	yield(self, "got_file_sizes")
 	
-	for thread in threads:
-		thread.wait_to_finish()
+	wait_for_threads()
 	
+	var totalFilesToCopyAmount = 0
+	for array in filesAndSizes:
+		totalFilesToCopyAmount += array.size()
+		
 	display_text("----------------------------------------------------------")
-	display_text(str("Copying ", filesAndSizes.size(), " out of ", files.size(),"!"))
+	display_text(str("Copying ", totalFilesToCopyAmount, " out of ", files.size(),"!"))
 	display_text("----------------------------------------------------------")
 	
-	threads[0].start(self, "copy_files", 0)
+	threads[0].canBeWaitedFor = true
+	threads[0].thread.start(self, "copy_files", 0)
 	yield(self, "copied")
 	
-	
-	for thread in threads:
-		thread.wait_to_finish()
+	wait_for_threads()
 	
 	$VBoxMain/HBoxContainer/GoButton.disabled = false
 	$VBoxMain/VBoxSub/VarContainer/SizeCheckBox.disabled = false
@@ -232,11 +245,16 @@ func _on_GoButton_pressed():
 	$VBoxMain/VBoxSub/VarContainer/SizeOptionButton.disabled = !$VBoxMain/VBoxSub/VarContainer/SizeCheckBox.pressed
 	
 	display_text("-----")
-	display_text("DONE")
+	display_text(str("DONE in ", OS.get_ticks_msec() - time_start, " ms"))
 	display_text("-----")
 	
 	files.clear()
 	filesAndSizes.clear()
+
+func wait_for_threads():
+	for thread in threads:
+		if thread.canBeWaitedFor: thread.thread.wait_to_finish()
+		thread.canBeWaitedFor = false
 
 func _on_DisplayFilesCheckBox_toggled(button_pressed):
 	displayFilesFound = button_pressed
@@ -248,17 +266,21 @@ func _on_DisplayMilestonesCheckBox_toggled(button_pressed):
 	displayMilestones = button_pressed
 
 #Checks if a file is to be copied or not and gets the files sizes (resolution and file size)
-func get_file_sizes(_a = null):
+func get_file_sizes(userdata = Array()):
+	var fileArray = userdata[0]
+	var ID = userdata[1]
+	
+	threads[ID].taskComplete = false
 	var i = float()
 	$VBoxMain/CurrentProgressBar.value = 0
 	var totalProgressStartValue = $VBoxMain/TotalProgressBar.value
+	var to_copy_array = Array()
 	
-	
-	for file in files:
+	for file in fileArray:
 		var path = file.path
 		yield(get_tree().create_timer(0.0000000000000001), "timeout")
 		i += 1
-		var completion = float(i / files.size()) * 100
+		var completion = float(i / fileArray.size()) * 100
 		$VBoxMain/CurrentProgressBar.value = completion
 		$VBoxMain/TotalProgressBar.value = totalProgressStartValue + (completion / steps)
 		
@@ -340,7 +362,7 @@ func get_file_sizes(_a = null):
 			
 		
 		if to_copy:
-			filesAndSizes.append({"path": path, "size": file_size, "file_name": file.file_name})
+			to_copy_array.append({"path": path, "size": file_size, "file_name": file.file_name})
 		
 			if displayFilesFound:
 				file_size = str(round(float(file_size) / fileSizeMult * 100) / 100)
@@ -351,19 +373,31 @@ func get_file_sizes(_a = null):
 				
 				display_text(str(path, " is ", file_size, " ", fileSizeDesignation, "."))
 	
-	emit_signal("got_file_sizes")
+	var anyThreadIncomplete = true
+	mutex.lock()
+	filesAndSizes.append(to_copy_array)
+	threads[ID].taskComplete = true
+	for thread in threads:
+		if !thread.taskComplete:
+			anyThreadIncomplete = false
+	mutex.unlock()
+	if anyThreadIncomplete: emit_signal("got_file_sizes")
 
 func copy_files(_a):
 	var i = float()
 	var totalProgressStartValue = $VBoxMain/TotalProgressBar.value
+	var total_amount_of_files = 0
+	for array in filesAndSizes:
+		total_amount_of_files += array.size()
 	
-	for file in filesAndSizes:
-		yield(get_tree().create_timer(0.0000000000000001), "timeout")
-		i += 1
-		var completion = float(i / filesAndSizes.size()) * 100
-		$VBoxMain/CurrentProgressBar.value = completion
-		$VBoxMain/TotalProgressBar.value = totalProgressStartValue + (completion / steps)
-		copy_file(file.path, str(toDir, "/", file.file_name))
+	for array in filesAndSizes:
+		for file in array:
+			yield(get_tree().create_timer(0.0000000000000001), "timeout")
+			i += 1
+			var completion = float(i / total_amount_of_files) * 100
+			$VBoxMain/CurrentProgressBar.value = completion
+			$VBoxMain/TotalProgressBar.value = totalProgressStartValue + (completion / steps)
+			copy_file(file.path, str(toDir, "/", file.file_name))
 	
 	$VBoxMain/CurrentProgressBar.value = 100
 	$VBoxMain/TotalProgressBar.value = 100
