@@ -33,6 +33,7 @@ var displayFoldersFound = true
 var displayFilesFound = false
 var displayMilestones = true
 var displayTextLine = 0
+var lastMilestone = 0
 var maxTextEditLines = 1000
 var textEditHiddenLines = 0
 
@@ -94,11 +95,12 @@ func _on_SizeSpinBox_value_changed(value):
 func display_text(text = String()):
 		
 	$VBoxMain/TextEdit.text = str($VBoxMain/TextEdit.text, text, "\n")
-	$VBoxMain/TextEdit.cursor_set_line($VBoxMain/TextEdit.get_line_count())
 	
 	if $VBoxMain/TextEdit.get_line_count() > maxTextEditLines:
 		$VBoxMain/TextEdit.text = $VBoxMain/TextEdit.text.split("\n", true, maxTextEditLines/2)[maxTextEditLines/2] #Half the text displayed for performance
 		
+	$VBoxMain/TextEdit.cursor_set_line($VBoxMain/TextEdit.get_line_count())
+	
 func dir_contents(path, layer = int()):
 	var dir = Directory.new()
 	mutex.lock()
@@ -123,12 +125,13 @@ func dir_contents(path, layer = int()):
 					display_text("Found file: " + str(path + "/" + file_name))
 				if file_name.ends_with(".jpg") or file_name.ends_with(".png") or file_name.ends_with(".jpeg"):
 					files.append({"path": str(path + "/" + file_name), "file_name": file_name})
-				if displayMilestones and (files.size() % milestone == 0):
+				if displayMilestones and (files.size() % milestone == 0) and lastMilestone != files.size():
 					display_text(str("Found ", files.size(), " images so far!"))
+					lastMilestone = files.size()
 				mutex.unlock()
 			file_name = dir.get_next()
 	else:
-		print("An error occurred when trying to access the path.")
+		print("An error occurred when trying to access the path:", path)
 	
 	
 	mutex.lock()
